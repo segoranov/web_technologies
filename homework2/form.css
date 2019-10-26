@@ -1,0 +1,41 @@
+#registration_header {
+    font-size: 30px;
+    background-color: yellowgreen;
+    color: white;
+    padding: 25px 25px;
+    width: 616px;
+    height: 30px;
+    text-align: center;
+    font-weight: bold;
+}
+
+#form_main {
+    display: inline-block;
+    border: solid;
+    border-color: gray;
+    border-top: none;
+}
+
+.form_element {
+    display: block;
+    border: solid;
+    border-color: rgb(204, 204, 255);
+    border-width: thin;
+    margin: 30px;
+    font-size: 20px;
+    background-color: white;
+    padding: 10px 10px;
+    width: 575px;
+}
+
+#registration_button {
+    display: block;
+    border: thin;
+    background-color: yellowgreen;
+    color: white;
+    margin: 30px;
+    font-size: 20px;
+    width: 600px;
+    padding: 10px 10px;
+    font-weight: bold;
+}
