@@ -9,6 +9,10 @@
     font-weight: bold;
 }
 
+body {
+    font-family: sans-serif;
+}
+
 #form_main {
     display: inline-block;
     border: solid;
