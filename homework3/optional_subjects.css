@@ -1,0 +1,11 @@
+.form_element {
+    display: block;
+    font-size: 20px;
+    padding: 10px 10px;
+    width: 575px;
+}
+
+#group_select {
+    margin: 10px;
+    font-size: 20px;
+}
