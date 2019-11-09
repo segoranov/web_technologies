@@ -21,6 +21,15 @@ if ($_POST) {
     $valid['lecturer_name'] = $lecturer_name;
     }
 
+    $description = $_POST['description'];
+    if (!$description) {
+    $errors['description'] = 'Описанието на избираемия предмет е задължително поле.';
+    } elseif (strlen($description) < 10) {
+    $errors['description'] = 'Описанието на избираемия предмет има минимална дължина 10 символа.';
+    } else {
+    $valid['description'] = $description;
+    }
+
     foreach ($errors as $error) {
         echo $error . "<br/>\n";
     }
