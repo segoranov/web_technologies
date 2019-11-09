@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="optional_subjects.css" rel="stylesheet" type="text/css">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+
+
+/* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+@media screen and (max-width: 600px) {
+  .col-25, .col-75, input[type=submit] {
+    width: 100%;
+    margin-top: 0;
+  }
+}
+</style>
+</head>
+<body>
+
+<h2>Add optional subject</h2>
+
+<div class="container">
+  <form method="post" action="/add-course.php">
+
+  <div class="row">
+    <div class="col-25">
+      <label for="subject_name">Subject Name</label>
+    </div>
+    <div class="col-75">
+      <input type="text" id="subject_name" name="subject_name" placeholder="Subject name...">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-25">
+      <label for="Lecturer name">Lecturer Name</label>
+    </div>
+    <div class="col-75">
+      <input type="text" id="lecturer_name" name="lecturer_name" placeholder="Lecturer name...">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-25">
+      <label for="country">Group</label>
+    </div>
+    <div class="col-75">
+      <select id="group" name="group">
+        <option value="core_cs">ЯКН</option>
+        <option value="basics_cs">ОКН</option>
+        <option value="math">М</option>
+        <option value="applied_math">ПМ</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="row">
+      <div class="col-25">
+        <label for="Credits">Credits</label>
+      </div>
+      <div class="col-75">
+        <input type="text" id="credits" name="credits" placeholder="Number of credits...">
+      </div>
+  </div>
+
+  <div class="row">
+    <div class="col-25">
+      <label for="description">Description</label>
+    </div>
+    <div class="col-75">
+      <textarea id="description" name="description" placeholder="Description of the subject..." style="height:200px"></textarea>
+    </div>
+  </div>
+
+  <div class="row">
+    <input type="submit" value="Submit">
+  </div>
+  </form>
+</div>
+
+</body>
+</html>
