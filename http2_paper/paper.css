@@ -1,3 +1,13 @@
 p {
+    width: 1300px;
     font-size: 25px;
+}
+
+img {
+    margin: 30px 30px;
+}
+
+li {
+    font-size: 25px;
+    width: 1300px;
 }
