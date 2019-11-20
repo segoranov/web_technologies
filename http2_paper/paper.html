@@ -20,7 +20,10 @@
 
     <h1>2. Какви всъщност са недостатъците на HTTP/1.1 и HTTP/1.0? </h1>
 
-    <p>Да се върнем назад в историята, за да бъдем по-конкретни:</p>
+    <p>За да бъда по-конкретен, нека да се върнем малко в историята.<br>
+        Първите версии на HTTP са били създадени, търсейки простота. За жалост, тази простота е била за сметка на
+        производителността на приложенията. Какви всъщост са проблемите?
+    </p>
 
     <ul>
         <li>HTTP/1.0 позволява само и единствено една заявка да преминава през изградена TCP конекция. Това очевидно
@@ -50,9 +53,15 @@
             натоварване на мрежовия трафик, както и препълване на т.нар.
             <a href="https://en.wikipedia.org/wiki/TCP_congestion_control#Congestion_window">TCP congestion
                 window</a> доста бързо.
-            Това довежда до ненужно голяма латенция, когато множество заявки се правят върху една TCP конекция.
+            Това довежда до ненужно натоварване на трафика, когато множество заявки се правят върху една TCP конекция.
         </li>
     </ul>
+
+    <p>
+        Тези проблеми не са били фатални, но с времето уеб приложенията са започнали да разширяват обхвата си, да стават
+        по-сложни, както и по-важни за нас, хората. По-този начин отежниха задачата на самите
+        потребителите на уеба, както и на уеб разработчиците. Точно това се опитва да олекоти HTTP/2.
+    </p>
 
     <p>
         HTTP/2 се справя с тези проблеми, без да променя семантиката на протокола. Просто оптимизира начина, по който
@@ -64,9 +73,7 @@
         <br><br>
         В крайна сметка HTTP/2 щади повече мрежата, защото се използват по-малко TCP конекции в сравнение с HTTP/1.x.
 
-        Също така HTTP/2 обработва съобщенията по-ефикасно, използвайки т.нар.
-        <a href="https://developers.google.com/web/fundamentals/performance/http2#binary_framing_layer">binary framing
-            layer</a>.
+        Също така HTTP/2 обработва съобщенията по-ефикасно, използвайки т.нар. <b>binary framing layer</b>
     </p>
 
     <img src="images/http2-changes-everything-13-638.jpg" alt="HTTP timeline" height="450">
@@ -97,6 +104,29 @@
             най-важните, които трябва да бъдат разбрани.
         </p>
 
+    </p>
+
+    <h1>Binary framing layer</h1>
+
+    <p>
+        В основата на подобренията на HTTP 2 е споменатият по-горе <b>binary framing layer</b>, който определя как
+        съобщенията
+        се изграждат и трансферират между клиента и сървъра.
+    </p>
+
+    <img src="images/binary_framing_layer01.svg" alt="binary framing layer" height="350" width="700">
+
+    <p>
+        The "layer" refers to a design choice to introduce a new optimized encoding mechanism between the socket
+        interface and the higher HTTP API exposed to our applications: the HTTP semantics, such as verbs, methods, and
+        headers, are unaffected, but the way they are encoded while in transit is different. Unlike the newline
+        delimited plaintext HTTP/1.x protocol, all HTTP/2 communication is split into smaller messages and frames, each
+        of which is encoded in binary format.
+
+        As a result, both client and server must use the new binary encoding mechanism to understand each other: an
+        HTTP/1.x client won’t understand an HTTP/2 only server, and vice versa. Thankfully, our applications remain
+        blissfully unaware of all these changes, as the client and server perform all the necessary framing work on our
+        behalf.
     </p>
 
 </body>
