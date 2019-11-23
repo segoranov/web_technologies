@@ -112,16 +112,14 @@
     <img src="images/binary_framing_layer01.svg" alt="binary framing layer" height="350" width="700">
 
     <p>
-        The "layer" refers to a design choice to introduce a new optimized encoding mechanism between the socket
-        interface and the higher HTTP API exposed to our applications: the HTTP semantics, such as verbs, methods, and
-        headers, are unaffected, but the way they are encoded while in transit is different. Unlike the newline
-        delimited plaintext HTTP/1.x protocol, all HTTP/2 communication is split into smaller messages and frames, each
-        of which is encoded in binary format.
-
-        As a result, both client and server must use the new binary encoding mechanism to understand each other: an
-        HTTP/1.x client won’t understand an HTTP/2 only server, and vice versa. Thankfully, our applications remain
-        blissfully unaware of all these changes, as the client and server perform all the necessary framing work on our
-        behalf.
+        Думата "layer" (слой) се отнася до изборът да се използва нов <b>механизъм за кодиране на съобщенията</b> между socket interface-а и
+        HTTP API-то, с което нашите приложения работят. Семантиката на HTTP - verbs, methods и headers, не е засегната, но начинът, по който
+        се кодира, докато се пренася по мрежата е различен. За разлика от HTTP/1.x, където имаме обикновен текст разделен с нови редове,
+        всичката комуникация в HTTP/2 е разделена на по-малки messages и frames, като всяко от тях е кодирано в двоичен (binary) формат.
+        <br><br>
+        В резултат на този механизъм за кодиране, и клиентът, и сървърът трябва да 'знаят' и използват този механизъм, за да могат да се
+        разбират. HTTP/1.x клиент няма да може да се разбере със сървър, поддържащ единствено HTTP/2, както и обратното. За щастие, нашите уеб
+        приложения изобщо не е нужно да разбират за всички тези промени, тъй като HTTP клиентите и сървърите вършат работата 'зад завесите'.
     </p>
 
 </body>
