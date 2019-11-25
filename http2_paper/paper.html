@@ -326,23 +326,20 @@
             <br><br>
 
             За потоците, които имат един и същи баща (sibling streams), се заделят ресурси пропорционално на техните тегла.
-            Например, ако поток А има тежест 12, а неговия брат B има тежест 4, 
-
-            Streams that share the same parent (in other words, sibling streams) should be allocated resources in
-            proportion
-            to their weight. For example, if stream A has a weight of 12 and its one sibling B has a weight of 4, then
-            to
-            determine the proportion of the resources that each of these streams should receive:
-
+            Например, ако поток А има тежест 12, а неговия брат B има тежест 4, тогава:
             <br><br>
-
-            Sum all the weights: 4 + 12 = 16
-            Divide each stream weight by the total weight: A = 12/16, B = 4/16
-            Thus, stream A should receive three-quarters and stream B should receive one- quarter of available
-            resources;
-            stream B should receive one-third of the resources allocated to stream A. Let’s work through a few more
-            hands-on
-            examples in the image above. From left to right:
+            Сумата на теглата: 4 + 12 = 16
+            <br>
+            A = 12/16, B= 4/16, т.е. А получава 3/4, а B получава 1/4 от наличните ресурси.
+            <br><br>
+            Да разгледаме още няколко примера от снимката по-горе. От ляво на дясно:
+            <br><br>
+            <ul>
+                <li>
+                        Neither stream A nor B specifies a parent dependency and are said to be dependent on the implicit "root
+                        stream";
+                </li>
+            </ul>
 
             <br><br>
             Neither stream A nor B specifies a parent dependency and are said to be dependent on the implicit "root
