@@ -318,17 +318,23 @@
         <img src="images/stream_prioritization01.svg" alt="stream prioritization" height="400" width="1000">
 
         <p>
-            A stream dependency within HTTP/2 is declared by referencing the unique identifier of another stream as its
-            parent; if the identifier is omitted the stream is said to be dependent on the "root stream". Declaring a
-            stream
-            dependency indicates that, if possible, the parent stream should be allocated resources ahead of its
-            dependencies. In other words, "Please process and deliver response D before response C".
+            <b>Stream dependency (зависимост между потоци)</b> в HTTP/2 се дефинира, като зависимият поток има
+            <i>референция</i> към уникалния идентификатор на потока, от който зависи. Ако такава референция липсва,
+            потокът по-подразбиране става зависим от т.нар. "root stream". Ако декларираме зависимост между потоци,
+            това индикира, че за parent stream-ът ще бъдат заделяни ресурси по-рано, отколкото за child stream-овете.
+            С други думи "Моля, обработете stream D преди stream C" (на картинката се вижда, че C е зависим от D).
+            <br><br>
+
+            За потоците, които имат един и същи баща (sibling streams), се заделят ресурси пропорционално на техните тегла.
+            Например, ако поток А има тежест 12, а неговия брат B има тежест 4, 
 
             Streams that share the same parent (in other words, sibling streams) should be allocated resources in
             proportion
             to their weight. For example, if stream A has a weight of 12 and its one sibling B has a weight of 4, then
             to
             determine the proportion of the resources that each of these streams should receive:
+
+            <br><br>
 
             Sum all the weights: 4 + 12 = 16
             Divide each stream weight by the total weight: A = 12/16, B = 4/16
@@ -338,6 +344,7 @@
             hands-on
             examples in the image above. From left to right:
 
+            <br><br>
             Neither stream A nor B specifies a parent dependency and are said to be dependent on the implicit "root
             stream";
             A has a weight of 12, and B has a weight of 4. Thus, based on proportional weights: stream B should receive
@@ -359,6 +366,8 @@
             the client to update these preferences at any point, which enables further optimizations in the browser. In
             other words, we can change dependencies and reallocate weights in response to user interaction and other
             signals.
+
+            <br><br>
 
             Note: Stream dependencies and weights express a transport preference, not a requirement, and as such do not
             guarantee a particular processing or transmission order. That is, the client cannot force the server to
