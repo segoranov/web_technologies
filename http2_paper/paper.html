@@ -27,10 +27,9 @@
         <b>
             <p id="top">
                 <i>
-                    Преди да започнете четенето на реферата, искам да кажа, че съм се въздържал от превод на основните
-                    термини, свързани с
-                    HTTP/2, понеже ми звучат неестествено, а и не мисля, че има много смисъл. Както гласи една
-                    поговорка:
+                    Преди да започнете четенето на реферата, искам да кажа, че на места съм избягвал превод на основните
+                    термини, свързани с HTTP/2, понеже ми звучат неестествено, а и не мисля, че има много смисъл. Както
+                    гласи една поговорка:
                     <br>
                     - Преводите са като жените - ако са хубави, не са вярни, а ако са вярни, не са хубави.
                     <br><br>
@@ -155,7 +154,7 @@
         <img src="images/binary_framing_layer01.svg" alt="binary framing layer" height="350" width="700">
 
         <p>
-            Думата "layer" (слой) се отнася до изборът да се използва нов <b>механизъм за кодиране на съобщенията</b>
+            Думата "layer" (слой) се отнася до избора да се използва нов <b>механизъм за кодиране на съобщенията</b>
             между
             socket interface-а и
             HTTP API-то, с което нашите приложения работят. Семантиката на HTTP - verbs, methods и headers, не е
@@ -180,39 +179,52 @@
         <h1 id="streams_messages_frames">5. Streams, messages, and frames</h1>
 
         <p>
-            The introduction of the new binary framing mechanism changes how the data is exchanged between the client
-            and
-            server. To describe this process, let’s familiarize ourselves with the HTTP/2 terminology:
+            Появата на <b>binary framing</b> механизма променя начина, по който данните меуду клиента и сървъра се
+            обменят. За да опишем този процес, нека първо да се запознаем с HTTP/2 терминологията:
+        </p>
+        <ul>
+            <li><b>Stream (поток)</b> - двупосочен поток от байтове в рамките на изградена връзка (TCP конекция), по
+                която може да преминават едно или няколко съобщения (messages).
+            </li>
+            <br>
+            <li>
+                <b>Message (съобщение)</b> - поредица от <b>frames</b>, които в съвкупност образуват логическа
+                заявка или отговор (logical request or response message).
+            </li>
+            <br>
+            <li>
+                <b>Frame</b> - най-малката 'комуникационна единица' в HTTP/2. Всеки <b>frame</b> съдържа т.нар. <u>frame
+                    header</u>,
+                който идентифицира stream-a, към който принадлежи.
+            </li>
+        </ul>
+        <p>
+            Връзката между тези термини може да се сумаризира по следния начин:<br><br>
 
-            Stream: A bidirectional flow of bytes within an established connection, which may carry one or more
-            messages.
-            Message: A complete sequence of frames that map to a logical request or response message.
-            Frame: The smallest unit of communication in HTTP/2, each containing a frame header, which at a minimum
-            identifies the stream to which the frame belongs.
-            The relation of these terms can be summarized as follows:
-
-            All communication is performed over a single TCP connection that can carry any number of bidirectional
-            streams.
-            Each stream has a unique identifier and optional priority information that is used to carry bidirectional
-            messages.
-            Each message is a logical HTTP message, such as a request, or response, which consists of one or more
-            frames.
-            The frame is the smallest unit of communication that carries a specific type of data—e.g., HTTP headers,
-            message
-            payload, and so on. Frames from different streams may be interleaved and then reassembled via the embedded
-            stream identifier in the header of each frame.
+            - Цялата комуникация между клиента и сървъра се извършва върху една TCP конекция, която има възможността да
+            поддържа произволен брой двупосочни потоци (bidirectional streams).
+            <br><br>
+            - Всеки поток (stream) има уникален идентификатор и опционална информация, задаваща приоритета му,
+            използвана за преноса на messages.
+            <br><br>
+            - Всеки message е логически HTTP message (request или response), което е съставено от един или няколко
+            frame-a.
+            <br><br>
+            - Frame-ът е най-малката 'комуникационна единица', носеща със себе си специфични данни - например HTTP
+            headers, message payload и т.н.
+            Frame-ове, принадлежащи на <b>различни</b> потоци (streams), могат да бъдат 'преплетени' (interleaved) и
+            впоследствие сглобени в
+            съобщение, използвайки frame header за да се извлече информация към кой поток принадлежи.
         </p>
 
         <img src="images/streams_messages_frames01.svg" alt="streams, messages and frames" height="700" width="1000">
 
         <p>
-            In short, HTTP/2 breaks down the HTTP protocol communication into an exchange of binary-encoded frames,
-            which
-            are then mapped to messages that belong to a particular stream, all of which are multiplexed within a single
-            TCP
-            connection. This is the foundation that enables all other features and performance optimizations provided by
-            the
-            HTTP/2 protocol.
+            Накратко, HTTP/2 разбива комуникацията на HTTP протокола до обмен на данни, представляващи <b>binary-encoded
+                frames</b>, които сами по себе си изграждат HTTP message и принадлежат на даден stream, като всеки
+            stream е мултиплексиран
+            върху една и съща TCP конекция. Именно това стои в основата на всички други оптимизации, които HTTP/2
+            предлага.
         </p>
 
         <h1 id="request_response_multiplexing">6. Request and response multiplexing</h1>
