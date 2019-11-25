@@ -325,54 +325,61 @@
             С други думи "Моля, обработете stream D преди stream C" (на картинката се вижда, че C е зависим от D).
             <br><br>
 
-            За потоците, които имат един и същи баща (sibling streams), се заделят ресурси пропорционално на техните тегла.
+            За потоците, които имат един и същи баща (sibling streams), се заделят ресурси пропорционално на техните
+            тегла.
             Например, ако поток А има тежест 12, а неговия брат B има тежест 4, тогава:
-            <br><br>
-            Сумата на теглата: 4 + 12 = 16
-            <br>
-            A = 12/16, B= 4/16, т.е. А получава 3/4, а B получава 1/4 от наличните ресурси.
-            <br><br>
-            Да разгледаме още няколко примера от снимката по-горе. От ляво на дясно:
-            <br><br>
-            <ul>
+            <ol>
                 <li>
-                        Neither stream A nor B specifies a parent dependency and are said to be dependent on the implicit "root
-                        stream";
+                    Сумираме теглата:
+                    <code translate="no" dir="ltr">4 + 12 = 16</code>
                 </li>
-            </ul>
+                <li>
+                    Делим тежестта на всеки поток на сумата: A = 12/16, B= 4/16, т.е. А получава 3/4, а B получава 1/4
+                    от наличните ресурси.
+                </li>
+            </ol>
+            <p>Да разгледаме примерите от снимката по-горе. От ляво на дясно:</p>
+            <ol>
+                <li>
+                    Нито поток А, нито поток B имат зависимост, за това имплицитно са зависими от "root stream". Заради
+                    това
+                    гледаме теглата (както по-горе обяснихме, А получава 3/4, а B 1/4).
+                </li>
+                <li>
+                    Поток D е зависим от "root stream". C е зависим от D. Така поток D трябва да получи 100% от
+                    ресурсите преди поток C.
+                    В случая тежестите нямат значение, понеже зависимостта на C играе по-силна роля от тежестта.
+                </li>
+                <li>
+                    Поток D трябва да получи 100% от ресурсите преди поток C. C трябва да получи 100% от ресурсите преди
+                    A и B.
+                    Поток B трябва да получи 1/3 от ресурсите спрямо поток А.
+                </li>
+                <li>
+                    Поток D трябва да получи 100% от ресурсите преди потоците C и Е; Е и C трябва да получат еднакакви
+                    ресурси преди А и B; А и B трябва да получат ресурси пропорционални на теглата им.
+                </li>
+            </ol>
 
-            <br><br>
-            Neither stream A nor B specifies a parent dependency and are said to be dependent on the implicit "root
-            stream";
-            A has a weight of 12, and B has a weight of 4. Thus, based on proportional weights: stream B should receive
-            one-third of the resources allocated to stream A.
-            Stream D is dependent on the root stream; C is dependent on D. Thus, D should receive full allocation of
-            resources ahead of C. The weights are inconsequential because C’s dependency communicates a stronger
-            preference.
-            Stream D should receive full allocation of resources ahead of C; C should receive full allocation of
-            resources
-            ahead of A and B; stream B should receive one-third of the resources allocated to stream A.
-            Stream D should receive full allocation of resources ahead of E and C; E and C should receive equal
-            allocation
-            ahead of A and B; A and B should receive proportional allocation based on their weights.
-            As the above examples illustrate, the combination of stream dependencies and weights provides an expressive
-            language for resource prioritization, which is a critical feature for improving browsing performance where
-            we
-            have many resource types with different dependencies and weights. Even better, the HTTP/2 protocol also
-            allows
-            the client to update these preferences at any point, which enables further optimizations in the browser. In
-            other words, we can change dependencies and reallocate weights in response to user interaction and other
-            signals.
+            <p>
+                Както и горните примери показват, комбинацията между тегла и зависимости на потоците са добър и
+                експресивен начин да приоритизраме ресурсите, което е критично важно за производителността.
+                Също така HTTP/2 позволява на клиента да ъпдейтва тези предпочитания по всяко едно време, което
+                позволява да се правят още оптимизации в browser-a. С други думи, можем да променяме теглата и
+                зависимостите спрямо действията на потребителя, например.
+            </p>
 
-            <br><br>
-
-            Note: Stream dependencies and weights express a transport preference, not a requirement, and as such do not
-            guarantee a particular processing or transmission order. That is, the client cannot force the server to
-            process
-            the stream in a particular order using stream prioritization. While this may seem counterintuitive, it is in
-            fact the desired behavior. We do not want to block the server from making progress on a lower priority
-            resource
-            if a higher priority resource is blocked.
+            <p class="note">
+                <strong>Забележка:</strong><span>
+                    Зависимостите и теглата са <i>предпочитание</i> за транспрот, а не <i>изискване</i>.
+                    Затова те не гарантират обработка или изпращане на ресурсите по определен ред. Тоест клиентът не
+                    може да
+                    'насили' сървъра да обработва потока по определен ред използвайки приоритета на самия поток.
+                    Това може да звучи неинтуитивно, но всъщност е поведение, което желаем. Защото не искаме сървърът да
+                    блокира и да не прави никакъв прогрес върху ресурс с <b>по-нисък</b> приоритет, ако случайно някой
+                    ресурс с <b>по-висок</b> приоритет бъде блокиран.
+                </span>
+            </p>
         </p>
 
         <h1 id="one_tcp_connection_per_origin">8. One TCP connection per origin</h1>

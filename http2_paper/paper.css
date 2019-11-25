@@ -51,6 +51,11 @@ li {
     padding: 0px 10px;
 }
 
+.note {
+    font-size: 25px;
+    color: rgb(197, 27, 27);
+}
+
 /* On smaller screens, where height is less than 450px, change the style of the sidebar (less padding and a smaller font size) */
 
 @media screen and (max-height: 450px) {
