@@ -233,7 +233,7 @@
             С HTTP/1.x, ако клиентът иска да направи няколко паралени заявки (request-и) към сървъра, с цел подобряване
             на
             производителността, тогава няма друг избор освен изграждането на няколко TCP конекции. Това е така, заради
-            HTTP/1.x <b>delivery model</b>ът, който налага ограничението максимум един response да бъде доставян за
+            HTTP/1.x <b>delivery model-ът</b>, който налага ограничението максимум един response да бъде доставян за
             единица време
             (response queuing) в дадена TCP конекция. Още по-лошото е, че това довежда до вече споменатия HOL
             (head-of-line) blocking.
@@ -290,22 +290,29 @@
         <h1 id="stream_prioritization">7. Stream prioritization</h1>
 
         <p>
-            Once an HTTP message can be split into many individual frames, and we allow for frames from multiple streams
-            to
-            be multiplexed, the order in which the frames are interleaved and delivered both by the client and server
-            becomes a critical performance consideration. To facilitate this, the HTTP/2 standard allows each stream to
-            have
-            an associated weight and dependency:
+            След като HTTP съобщението се раздели на индивидуални frame-ове, които принадлежат на различни
+            strеам-ове и могат да се мултиплексират, има критично значение за производителността редът,
+            по който ги 'преплитаме'. За да улесни този процес, HTTP/2 позволява всеки <b>stream</b> да има
+            <b>weight (тежест)</b> и <b>dependency (зависимост)</b>.
+        </p>
 
-            Each stream may be assigned an integer weight between 1 and 256.
-            Each stream may be given an explicit dependency on another stream.
-            The combination of stream dependencies and weights allows the client to construct and communicate a
-            "prioritization tree" that expresses how it would prefer to receive responses. In turn, the server can use
-            this
-            information to prioritize stream processing by controlling the allocation of CPU, memory, and other
-            resources,
-            and once the response data is available, allocation of bandwidth to ensure optimal delivery of high-priority
-            responses to the client.
+        <ul>
+            <li>
+                Всеки stream може да има цяло число от 1 до 256, обозначаващо теглото му.
+            </li>
+            <li>
+                Всеки stream може да има експлицитна зависимост от друг stream.
+            </li>
+        </ul>
+        </p>
+        <p>
+            Комбинацията от зависимости и тегла позволява на клиента да изгради и сподели
+            <b>"дърво на зависимост (prioritization tree)"</b>,
+            което казва как той би искал да получава response-ите. От своя страна сървърът може да използва тази
+            информация с цел да приоритизира обработката на потоците, като контролира колко ресурси ще се заделят
+            за даден поток (CPU, memory и др.). След като response-ът за даден поток е готов, сървърът
+            настройва мрежата така, че да осигури оптимална доставка на response-и на <b>по-приоритетни</b> потоци към
+            клиента.
         </p>
 
         <img src="images/stream_prioritization01.svg" alt="stream prioritization" height="400" width="1000">
