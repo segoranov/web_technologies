@@ -220,9 +220,8 @@
         <img src="images/streams_messages_frames01.svg" alt="streams, messages and frames" height="700" width="1000">
 
         <p>
-            Накратко, HTTP/2 разбива комуникацията на HTTP протокола до обмен на данни, представляващи <b>binary-encoded
-                frames</b>, които сами по себе си изграждат HTTP message и принадлежат на даден stream, като всеки
-            stream е мултиплексиран
+            Накратко, HTTP/2 разбива комуникацията на HTTP протокола до обмен на <b>binary-encoded frames</b>, които
+            сами по себе принадлежат на точно определен stream, и изграждат HTTP message. А всеки stream е мултиплексиран
             върху една и съща TCP конекция. Именно това стои в основата на всички други оптимизации, които HTTP/2
             предлага.
         </p>
