@@ -221,7 +221,8 @@
 
         <p>
             Накратко, HTTP/2 разбива комуникацията на HTTP протокола до обмен на <b>binary-encoded frames</b>, които
-            сами по себе принадлежат на точно определен stream, и изграждат HTTP message. А всеки stream е мултиплексиран
+            сами по себе принадлежат на точно определен stream, и изграждат HTTP message. А всеки stream е
+            мултиплексиран
             върху една и съща TCP конекция. Именно това стои в основата на всички други оптимизации, които HTTP/2
             предлага.
         </p>
@@ -229,46 +230,61 @@
         <h1 id="request_response_multiplexing">6. Request and response multiplexing</h1>
 
         <p>
-            With HTTP/1.x, if the client wants to make multiple parallel requests to improve performance, then multiple
-            TCP
-            connections must be used (see Using Multiple TCP Connections ). This behavior is a direct consequence of the
-            HTTP/1.x delivery model, which ensures that only one response can be delivered at a time (response queuing)
-            per
-            connection. Worse, this also results in head-of-line blocking and inefficient use of the underlying TCP
-            connection.
-
-            The new binary framing layer in HTTP/2 removes these limitations, and enables full request and response
-            multiplexing, by allowing the client and server to break down an HTTP message into independent frames,
-            interleave them, and then reassemble them on the other end.
+            С HTTP/1.x, ако клиентът иска да направи няколко паралени заявки (request-и) към сървъра, с цел подобряване
+            на
+            производителността, тогава няма друг избор освен изграждането на няколко TCP конекции. Това е така, заради
+            HTTP/1.x <b>delivery model</b>ът, който налага ограничението максимум един response да бъде доставян за
+            единица време
+            (response queuing) в дадена TCP конекция. Още по-лошото е, че това довежда до вече споменатия HOL
+            (head-of-line) blocking.
+            Това е неефикасно използване на TCP конекцията.
+            <br><br>
+            Новият <b>binary framing layer</b> в HTTP/2 премахва тези ограничения и дава възможност
+            напълно да се мултиплексират request-ите и respons-ите, позволявайки на клиентите и сървирте да разбиват
+            HTTP съобщенията на независими един от друг frame-ове, след това да преплитат тези frame-ове и накрая да ги
+            сглобяват обратно на другия край на конекцията.
         </p>
 
         <img src="images/multiplexing01.svg" alt="multiplexing" height="400" width="1000">
 
         <p>
-            The snapshot captures multiple streams in flight within the same connection. The client is transmitting a
-            DATA
-            frame (stream 5) to the server, while the server is transmitting an interleaved sequence of frames to the
-            client
-            for streams 1 and 3. As a result, there are three parallel streams in flight.
-
-            The ability to break down an HTTP message into independent frames, interleave them, and then reassemble them
-            on
-            the other end is the single most important enhancement of HTTP/2. In fact, it introduces a ripple effect of
-            numerous performance benefits across the entire stack of all web technologies, enabling us to:
-
-            Interleave multiple requests in parallel without blocking on any one.
-            Interleave multiple responses in parallel without blocking on any one.
-            Use a single connection to deliver multiple requests and responses in parallel.
-            Remove unnecessary HTTP/1.x workarounds (see Optimizing for HTTP/1.x, such as concatenated files, image
-            sprites,
-            and domain sharding).
-            Deliver lower page load times by eliminating unnecessary latency and improving utilization of available
-            network
-            capacity.
-            And much more…
-            The new binary framing layer in HTTP/2 resolves the head-of-line blocking problem found in HTTP/1.x and
-            eliminates the need for multiple connections to enable parallel processing and delivery of requests and
-            responses. As a result, this makes our applications faster, simpler, and cheaper to deploy.
+            Снимката отгоре показва няколко потока 'в полет' в рамките на една TCP конекция. Клиентът препраща DATA
+            frame към сървъра, докато през това време сървърът препраща преплетена последователност от frames към
+            клиента
+            съответно за stream 1 и stream 3. В резултат на това получаваме 3 паралелни потока в действие. Способността
+            да
+            се разбие едно HTTP съобщение на независими frame-ове, след това да се преплитат и накрая да се сглобяват в
+            съобщение
+            е най-важното подобрение, което предлага HTTP/2. То прави <a
+                href="https://en.wikipedia.org/wiki/Ripple_effect">ripple effect</a>
+            относно ползите, които получаваме:
+        </p>
+        <ul>
+            <li>
+                Паралелно преплитане на request-и без да се блокира нито един request.
+            </li>
+            <li>
+                Паралелно преплитане на response-и без да се блокира нито един response.
+            </li>
+            <li>
+                Използване на <u>една</u>> конекиця за доставяне на <b>няколко</b> request-и и respons-и в паралел.
+            </li>
+            <li>
+                Премахване на HTTP/1.x <b>workarounds</b> с цел оптимизации.
+            </li>
+            <li>
+                По-бързо зареждане на уеб страници, тъй като латенцията е по-малка. (По този начин използваме мрежовите
+                ресурси по ефикасно).
+            </li>
+            <li>
+                И много други...
+            </li>
+        </ul>
+        <p>
+            Накратко новият <b>binary framing layer</b> в HTTP/2 решава проблема с head-of-line blocking, който го има в
+            HTTP/1.x и премахва нуждата от множество TCP конекции с цел изграждане на паралелна обработка на request-и и
+            response-и. В резултат на това нашите приложения са по-прости, по-бързи и по-евтини за deployment
+            (внедряване).
         </p>
 
         <h1 id="stream_prioritization">7. Stream prioritization</h1>
