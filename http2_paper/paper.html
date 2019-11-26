@@ -508,35 +508,25 @@
 
         <h1 id="push_promise_101">11. PUSH_PROMISE 101</h1>
         <p>
-            All server push streams are initiated via PUSH_PROMISE frames, which signal the server’s intent to push the
-            described resources to the client and need to be delivered ahead of the response data that requests the
-            pushed
-            resources. This delivery order is critical: the client needs to know which resources the server intends to
-            push
-            to avoid creating duplicate requests for these resources. The simplest strategy to satisfy this requirement
-            is
-            to send all PUSH_PROMISE frames, which contain just the HTTP headers of the promised resource, ahead of the
-            parent’s response (in other words, DATA frames).
-
-            Once the client receives a PUSH_PROMISE frame it has the option to decline the stream (via a RST_STREAM
-            frame)
-            if it wants to. (This might occur for example because the resource is already in cache.) This is an
-            important
-            improvement over HTTP/1.x. By contrast, the use of resource inlining, which is a popular "optimization" for
-            HTTP/1.x, is equivalent to a "forced push": the client cannot opt-out, cancel it, or process the inlined
-            resource individually.
-
-            With HTTP/2 the client remains in full control of how server push is used. The client can limit the number
-            of
-            concurrently pushed streams; adjust the initial flow control window to control how much data is pushed when
-            the
-            stream is first opened; or disable server push entirely. These preferences are communicated via the SETTINGS
-            frames at the beginning of the HTTP/2 connection and may be updated at any time.
-
-            Each pushed resource is a stream that, unlike an inlined resource, allows it to be individually multiplexed,
-            prioritized, and processed by the client. The only security restriction, as enforced by the browser, is that
-            pushed resources must obey the same-origin policy: the server must be authoritative for the provided
-            content.
+            Всички <b>server push streams</b> се инициират посредством <b>PUSH_PROMISE</b> frames, които сигнализират за
+            намеренията на сървъра да push-не дадените ресурси към клиента. Тези frames трябва да бъдат push-нати преди самите ресурси.
+            Това е изключително важно: клиентът трябва да знае <b>предварително</b> кои ресурси сървърът има намерение да push-не, с цел
+            избягване на дуплициране на ресурси, например.
+            <br><br>
+            След като клиентът получи <b>PUSH_PROMISE</b> frame, той има възможността да откаже този поток посредством
+            <b>RST_STREAM</b> frame. (Това може да се случи, ако например ресурът вече е кеширан от клиента). Това е 
+            важно подобрение на HTTP/1.x. Защото <i>resource inlining</i> оптимизацията, която HTTP/1.x ползва, е еквивалентна
+            на forced push: клиентът не може да откаже push-а.
+            <br><br>
+            С HTTP/2 клиентът има пълен контрол над това как се използва server push механизмът. Клиентът може да ограничи
+            броят на конкурентните push streams; може да наглася flow control window-ът за да контролира колко данни минават през 
+            даден push stream; може да деактивира server push напълно. Тези 'изисквания' на клиента се предават към сървъра посредством
+            <b>SETTINGS</b> frame в началото на HTTP/2 конекцията и могат да бъдат update-нати по всяко едно време.
+            <br><br>
+            Всеки push-нат ресурс е stream, който, за разлика от inlined resource, може да бъде индивидуално мултиплексиран, приоритизиран
+            и обработен от клиента. Единственото ограничение, свързано със сигурността, наложено от browser-a, е, че push-натите ресурси
+            трябва да се подчиняват на т.нар. <a href="https://en.wikipedia.org/wiki/Same-origin_policy">same-origin policy</a>: сървърът
+            определя ресурите, които ще бъдат предоставяни.
         </p>
 
         <h1 id="header_compression">12. Header compression</h1>
@@ -607,6 +597,9 @@
                 <li>https://en.wikipedia.org/wiki/Head-of-line_blocking</li>
             </a>
 
+            <a href="https://en.wikipedia.org/wiki/Same-origin_policy>">
+                <li>https://en.wikipedia.org/wiki/Same-origin_policy</li>
+            </a>
         </ul>
     </div>
 
