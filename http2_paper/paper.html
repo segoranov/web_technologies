@@ -261,10 +261,12 @@
                 Паралелно изпращане на response-и без да се блокира нито един response.
             </li>
             <li>
-                Използване на <b>една</b> TCP конекиця за доставяне на <b>няколко</b> request-и и respons-и в паралел (следствие от горните).
+                Използване на <b>една</b> TCP конекиця за доставяне на <b>няколко</b> request-и и respons-и в паралел
+                (следствие от горните).
             </li>
             <li>
-                Премахване на HTTP/1.x <b>workarounds</b>, които имат за цел оптимизация на производителността (вече не са нужни!).
+                Премахване на HTTP/1.x <b>workarounds</b>, които имат за цел оптимизация на производителността (вече не
+                са нужни!).
             </li>
             <li>
                 По-бързо зареждане на уеб страници, тъй като латенцията е по-малка. (използваме мрежовите
@@ -379,92 +381,108 @@
         <h1 id="one_tcp_connection_per_origin">8. One TCP connection per origin</h1>
 
         <p>
-            With the new binary framing mechanism in place, HTTP/2 no longer needs multiple TCP connections to multiplex
-            streams in parallel; each stream is split into many frames, which can be interleaved and prioritized. As a
-            result, all HTTP/2 connections are persistent, and only one connection per origin is required, which offers
-            numerous performance benefits.
+            С новия <b>binary framing layer</b>, HTTP/2 няма нужда от изграждането на няколко TCP конекции.
+            Както разбрахме, всеки stream бива 'преплетен' и приоритизиран. В резултат на това, всички HTTP/2
+            конекции са постоянни (persistent) и само една конекция от дадена изходна точка е нужна. Това подобрява
+            многократно производителността.
 
-            For both SPDY and HTTP/2 the killer feature is arbitrary multiplexing on a single well congestion controlled
-            channel. It amazes me how important this is and how well it works. One great metric around that which I
-            enjoy is
-            the fraction of connections created that carry just a single HTTP transaction (and thus make that
-            transaction
-            bear all the overhead). For HTTP/1 74% of our active connections carry just a single transaction—persistent
-            connections just aren’t as helpful as we all want. But in HTTP/2 that number plummets to 25%. That’s a huge
-            win
-            for overhead reduction. (HTTP/2 is Live in Firefox, Patrick McManus)
+            Повечето HTTP размени на съобщения са кратки и бързи, докато TCP е създаден за дълготрайни и
+            огромни трансфери на данни. Използвайки една TCP конекция, HTTP/2 може да използва по-ефикасно
+            всяка една TCP конекция и също така значително да намали цялостния <b>overhead</b>, свързан с протокола.
+            Още повече, използването на по-малко конекции намалява използваната памет и изчислителни ресурси.
+        </p>
 
-            Most HTTP transfers are short and bursty, whereas TCP is optimized for long- lived, bulk data transfers. By
-            reusing the same connection, HTTP/2 is able to both make more efficient use of each TCP connection, and also
-            significantly reduce the overall protocol overhead. Further, the use of fewer connections reduces the memory
-            and
-            processing footprint along the full connection path (in other words, client, intermediaries, and origin
-            servers). This reduces the overall operational costs and improves network utilization and capacity. As a
-            result,
-            the move to HTTP/2 should not only reduce network latency, but also help improve throughput and reduce the
-            operational costs.
-
-            Note: Reduced number of connections is a particularly important feature for improving performance of HTTPS
-            deployments: this translates to fewer expensive TLS handshakes, better session reuse, and an overall
-            reduction
-            in required client and server resources.
+        <p class="note">
+            <strong>Забележка:</strong><span>
+                По-малкия брой конекции е изкючително важен feature за подобряването на производителността на
+                deployments,
+                разчитащи на <a href="https://en.wikipedia.org/wiki/HTTPS">HTTPS</a>,
+                защото ще има по-малък брой TLS handshakes, които са скъпи, както и по-добро преизползване на дадена
+                сесия.
+            </span>
+        </p>
         </p>
 
         <h1 id="flow_control">9.Flow control</h1>
         <p>
-            Flow control is a mechanism to prevent the sender from overwhelming the receiver with data it may not want
-            or be
-            able to process: the receiver may be busy, under heavy load, or may only be willing to allocate a fixed
-            amount
-            of resources for a particular stream. For example, the client may have requested a large video stream with
-            high
-            priority, but the user has paused the video and the client now wants to pause or throttle its delivery from
-            the
-            server to avoid fetching and buffering unnecessary data. Alternatively, a proxy server may have fast
-            downstream
-            and slow upstream connections and similarly wants to regulate how quickly the downstream delivers data to
-            match
-            the speed of upstream to control its resource usage; and so on.
+            Flow control е механизъм, с който получателят на дадени ресурси може да каже "Чакай! Спри! Много бързо ми
+            изпращаш информацията и
+            аз нямам възможност да я обработвам. Забави темпото". С други думи, този, който получава HTTP съобщенията
+            може да:
+        </p>
+        <ul>
+            <li>е зает</li>
+            <li>е подложен на голям трафик</li>
+            <li>няма възможност да задели дадено количество ресурси за даден stream</li>
+        </ul>
 
-            Do the above requirements remind you of TCP flow control? They should, as the problem is effectively
-            identical
-            (see Flow Control). However, because the HTTP/2 streams are multiplexed within a single TCP connection, TCP
-            flow
-            control is both not granular enough, and does not provide the necessary application-level APIs to regulate
-            the
-            delivery of individual streams. To address this, HTTP/2 provides a set of simple building blocks that allow
-            the
-            client and server to implement their own stream- and connection-level flow control:
+        <p>Например: </p>
+        <ul>
+            <li>
+                Клиентът може да е изпратил заявка за огромен video stream с висок приоритет,
+                но потребителят да е цъкнал pause на видеото. В този момент клиентът иска да спре или намали
+                потокът от данни към себе си, с цел избягване на пренос и буфериране на излишни данни.
+            </li>
+            <li>
+                Даден proxy server може да има бързи downstream и бавни upstream конекции и иска да регулира
+                колко бързо downstream конекциите пренасят данните, за да ги синхронизира с бързината на upstream
+                конекциите, с цел контролиране на използваните ресурси.
+            </li>
+            <li>
+                И други...
+            </li>
+        </ul>
 
-            Flow control is directional. Each receiver may choose to set any window size that it desires for each stream
-            and
-            the entire connection.
-            Flow control is credit-based. Each receiver advertises its initial connection and stream flow control window
-            (in
-            bytes), which is reduced whenever the sender emits a DATA frame and incremented via a WINDOW_UPDATE frame
-            sent
-            by the receiver.
-            Flow control cannot be disabled. When the HTTP/2 connection is established the client and server exchange
-            SETTINGS frames, which set the flow control window sizes in both directions. The default value of the flow
-            control window is set to 65,535 bytes, but the receiver can set a large maximum window size (2^31-1 bytes)
-            and
-            maintain it by sending a WINDOW_UPDATE frame whenever any data is received.
-            Flow control is hop-by-hop, not end-to-end. That is, an intermediary can use it to control resource use and
-            implement resource allocation mechanisms based on own criteria and heuristics.
-            HTTP/2 does not specify any particular algorithm for implementing flow control. Instead, it provides the
-            simple
-            building blocks and defers the implementation to the client and server, which can use it to implement custom
-            strategies to regulate resource use and allocation, as well as implement new delivery capabilities that may
-            help
-            improve both the real and perceived performance (see Speed, Performance, and Human Perception) of our web
-            applications.
+        <p>
+            Горните неща може би ви напомнят за <a
+                href="https://en.wikipedia.org/wiki/Transmission_Control_Protocol#Flow_control">TCP flow control</a> -
+            проблемът там е идентичен. Разликата обаче е, че HTTP/2 потоците се мултиплексират върху <u>една</u> TCP
+            конекция,
+            което затруднява регулацията на тяхния пренос.
+            <br>
+            HTTP/2 предоставя няколко прости елемента, които позволяват на клиента и сървъра да си имплементират сами
+            <b>stream- и connection-level flow control:</b>
+        </p>
 
-            For example, application-layer flow control allows the browser to fetch only a part of a particular
-            resource,
-            put the fetch on hold by reducing the stream flow control window down to zero, and then resume it later. In
-            other words, it allows the browser to fetch a preview or first scan of an image, display it and allow other
-            high
-            priority fetches to proceed, and resume the fetch once more critical resources have finished loading.
+        <ul>
+            <li>
+                Всеки получател може да си избере сам <b>window size-ът</b>, който желае за отделните streams, както и
+                за цялата конекция.
+            </li>
+            <li>
+                Flow control не може да бъде деактивиран. Когато HTTP/2 конекцията е изградена, клиентът и сървърът си
+                разменят
+                <b>SETTINGS</b> frames, които определят големината на <b>flow control windows</b> в двете посоки на
+                комуникацията.
+                Стойността по подразбиране на този window е 65,535 байта, но получателят може да го set-не на
+                максималната стойност (2^31-1 байта),
+                и да го поддържа изпращайки <b>WINDOW_UPDATE</b> frame, когато получи някакви данни.
+            </li>
+            <li>
+                Flow control е базиран на <b>hop-by-hop</b>, а не на <b>end-to-end</b>. Тоест всички машини, през които
+                минават
+                данните, докато отиват към крайната цел, могат да влияят на flow-control-ът (за разлика от end-to-end,
+                където не ни интересува изобщо
+                през къде минават данните).
+            </li>
+        </ul>
+
+
+        <p>
+            HTTP/2 не използва специфичен алгоритъм за имплементацията на flow control. Той предоставя елементи, чрез
+            които клиентът и сървърът да могат сами да си избератстратегията и алгоритъма, с който ще го имплементират.
+            Това може да подобри както истинската производителност, така и
+            <a href="https://hpbn.co/primer-on-web-performance/#speed-performance-and-human-perception">възприетата от
+                човека производителност</a>.
+            <br><br>
+            Например application-layer flow control може да позволи на browser-а, ако иска, да си fetch-не само част от
+            определен ресурс.
+            След това ще отложи (on hold) доставката на оставащата част този ресурс, намалявайки stream flow control
+            window-ът на 0. И по-късно може
+            да го увеличи. С други думи, browser-ът например може да си изтегли само preview на дадена картина, да я
+            покаже на потребителя и
+            после да позволи на други ресурси с висок приоритет да бъдат fetch-нати. По-късно, след като по-критичните
+            ресурси бъдат изтеглени, ще си доизтегли цялата картинка.
         </p>
 
         <h1 id="server_push">10. Server push</h1>
