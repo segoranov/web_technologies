@@ -472,40 +472,38 @@
         </p>
 
         <h1 id="server_push">10. Server push</h1>
-        <p>Another powerful new feature of HTTP/2 is the ability of the server to send multiple responses for a single
-            client request. That is, in addition to the response to the original request, the server can push additional
-            resources to the client, without the client having to request each one explicitly.
+        <p>
+            Друг мощен нов feature на HTTP/2 е способността на даден сървър да изпраща <b>няколко response-a</b> в
+            отговор на
+            <b>една клиентска заявка</b>. Тоест освен данните, които клиентът е поискал, сървърът може да push-не
+            допълнителни ресурси
+            към клиента, които сметне, че ще му бъдат нужни, без клиентът да ги е поискал експлицитно.
         </p>
 
         <img src="images/push01.svg" alt="server push" height="400" width="1000">
 
+        <p class="note">
+            <strong>Забележка:</strong><span>
+                HTTP/2 избяга от стрикната семнатика на 'one-to-one request-response' и позволи 'one-to-many request-response'
+                семантика, която е инициирана от сървъра. Този нов feature ще има важни дългосрочни последици за това как
+                се мисли относно протокола и къде/как той ще бъде използван.
+            </span>
+        </p>
+
         <p>
-            Note: HTTP/2 breaks away from the strict request-response semantics and enables one-to-many and
-            server-initiated
-            push workflows that open up a world of new interaction possibilities both within and outside the browser.
-            This
-            is an enabling feature that will have important long-term consequences both for how we think about the
-            protocol,
-            and where and how it is used.
-            Why would we need such a mechanism in a browser? A typical web application consists of dozens of resources,
-            all
-            of which are discovered by the client by examining the document provided by the server. As a result, why not
-            eliminate the extra latency and let the server push the associated resources ahead of time? The server
-            already
-            knows which resources the client will require; that’s server push.
-
-            In fact, if you have ever inlined a CSS, JavaScript, or any other asset via a data URI (see Resource
-            Inlining),
-            then you already have hands-on experience with server push. By manually inlining the resource into the
-            document,
-            we are, in effect, pushing that resource to the client, without waiting for the client to request it. With
-            HTTP/2 we can achieve the same results, but with additional performance benefits. Push resources can be:
-
-            Cached by the client
-            Reused across different pages
-            Multiplexed alongside other resources
-            Prioritized by the server
-            Declined by the client
+            Защо бихме имали нужда от такъв механизъм в browser-a? Едно стандартно web приложение се състои от много ресурси,
+            всички от които се октриват от клиента, анализирайки документите, които сървърът предоставя. В резултат на това, 
+            защо да не се елиминира ненужната латенция и не се позволи на сървъра да push-ва ресурсите, които са близки до поисканите
+            от клиента, предварително? С други думи, сървърът предварително знае кои ресурси клиентът ще поиска - това е <b>server push</b>.
+            <br><br>
+            Push ресурсите могат да бъдат:
+            <ul>
+                <li>кеширани от клиента</li>
+                <li>преизползвани в рамките на няколко различни web страници</li>
+                <li>мултиплексирани заедно с други ресурси</li>
+                <li>приоритизирани от сървъра</li>
+                <li>отказани от клиента</li>
+            </ul>
         </p>
 
         <h1 id="push_promise_101">11. PUSH_PROMISE 101</h1>
