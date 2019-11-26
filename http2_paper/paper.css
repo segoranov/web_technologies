@@ -16,7 +16,7 @@ li {
 
 .sidenav {
     height: 100%;
-    width: 400px;
+    width: 275px;
     position: fixed;
     z-index: 1;
     top: 0;
@@ -47,7 +47,7 @@ li {
 /* Style page content */
 
 .main {
-    margin-left: 400px;
+    margin-left: 275px;
     padding: 0px 10px;
 }
 
