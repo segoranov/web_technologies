@@ -1,5 +1,4 @@
 p {
-    width: 1300px;
     font-size: 25px;
 }
 
@@ -9,7 +8,6 @@ img {
 
 li {
     font-size: 25px;
-    width: 1300px;
 }
 
 /* The sidebar menu */
@@ -50,6 +48,7 @@ li {
     margin-left: 275px;
     padding: 0px 10px;
     text-align: justify;
+    width: 80%;
 }
 
 .note {
