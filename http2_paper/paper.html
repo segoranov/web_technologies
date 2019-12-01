@@ -132,23 +132,16 @@
         <img src="images/binary_framing_layer01.svg" alt="binary framing layer" height="350" width="700">
 
         <p>
-            Думата "layer" (слой) се отнася до избора да се използва нов <b>механизъм за кодиране на съобщенията</b>
-            между
-            socket interface-а и
-            HTTP API-то, с което нашите приложения работят. Семантиката на HTTP - verbs, methods и headers, не е
-            засегната,
-            но начинът, по който
-            се кодира, докато се пренася по мрежата е различен. За разлика от HTTP/1.x, където имаме обикновен текст
-            разделен с нови редове,
+            Думата "layer" (слой) се отнася до избора да се използва нов <b>механизъм за кодиране на съобщенията</b>,
+            които клиентът и сървърът си разменят. Семантиката на HTTP - verbs, methods и headers, не е
+            засегната, но начинът, по който се кодират съобщенията, докато се пренасят по мрежата, е различен.
+            За разлика от HTTP/1.x, където имаме обикновен текст разделен с нови редове,
             всичката комуникация в HTTP/2 е разделена на по-малки messages и frames, като всяко от тях е кодирано в
-            двоичен
-            (binary) формат.
+            двоичен (binary) формат.
             <br><br>
             В резултат на този механизъм за кодиране, и клиентът, и сървърът трябва да 'знаят' и използват този
-            механизъм,
-            за да могат да се
-            разбират. HTTP/1.x клиент няма да може да се разбере със сървър, поддържащ единствено HTTP/2, както и
-            обратното.
+            механизъм, за да могат да се разбират.
+            HTTP/1.x клиент няма да може да се разбере със сървър, поддържащ единствено HTTP/2, както и обратното.
             За щастие, нашите уеб
             приложения изобщо не е нужно да разбират за всички тези промени, тъй като HTTP клиентите и сървърите вършат
             работата 'зад завесите'.
@@ -192,7 +185,7 @@
             headers, message payload и т.н.
             Frame-ове, принадлежащи на <b>различни</b> потоци (streams), могат да бъдат 'преплетени' (interleaved) и
             впоследствие сглобени в
-            съобщение, използвайки frame header за да се извлече информация към кой поток принадлежи.
+            съобщение, използвайки frame header-а, за да се извлече информация към кой stream принадлежи.
         </p>
 
         <img src="images/streams_messages_frames01.svg" alt="streams, messages and frames" height="700" width="1000">
@@ -217,7 +210,7 @@
             Това е неефикасно използване на TCP конекцията.
             <br><br>
             Новият <b>binary framing layer</b> в HTTP/2 премахва тези ограничения и дава възможност
-            напълно да се мултиплексират request-ите и respons-ите, позволявайки на клиентите и сървирте да разбиват
+            напълно да се мултиплексират request-ите и respons-ите, позволявайки на клиентите и сървърите да разбиват
             HTTP съобщенията на независими един от друг frame-ове, след това да преплитат тези frame-ове и накрая да ги
             сглобяват обратно на другия край на конекцията.
         </p>
@@ -339,7 +332,7 @@
                 Както и горните примери показват, комбинацията между тегла и зависимости на потоците са добър и
                 експресивен начин да приоритизраме ресурсите, което е критично важно за производителността.
                 Също така HTTP/2 позволява на клиента да ъпдейтва тези предпочитания по всяко едно време, което
-                позволява да се правят още оптимизации в browser-a. С други думи, можем да променяме теглата и
+                позволява да се правят още оптимизации в browser-a. Можем да променяме теглата и
                 зависимостите спрямо действията на потребителя, например.
             </p>
 
@@ -375,8 +368,7 @@
                 По-малкия брой конекции е изкючително важен feature за подобряването на производителността на
                 deployments,
                 разчитащи на <a href="https://en.wikipedia.org/wiki/HTTPS">HTTPS</a>,
-                защото ще има по-малък брой TLS handshakes, които са скъпи, както и по-добро преизползване на дадена
-                сесия.
+                защото ще има по-малък брой TLS handshakes, които са скъпи.
             </span>
         </p>
         </p>
@@ -424,7 +416,7 @@
 
         <ul>
             <li>
-                Всеки получател може да си избере сам <b>window size-ът</b>, който желае за отделните streams, както и
+                Всеки получател може да си избере сам <b>window size-a</b>, който желае за отделните потоци, както и
                 за цялата конекция.
             </li>
             <li>
@@ -438,17 +430,14 @@
             </li>
             <li>
                 Flow control е базиран на <b>hop-by-hop</b>, а не на <b>end-to-end</b>. Тоест всички машини, през които
-                минават
-                данните, докато отиват към крайната цел, могат да влияят на flow-control-ът (за разлика от end-to-end,
-                където не ни интересува изобщо
-                през къде минават данните).
+                минават данните, докато отиват към крайната цел, могат да влияят на flow-control-а (за разлика от
+                end-to-end, където не ни интересува изобщо през къде минават данните).
             </li>
         </ul>
 
-
         <p>
             HTTP/2 не използва специфичен алгоритъм за имплементацията на flow control. Той предоставя елементи, чрез
-            които клиентът и сървърът да могат сами да си избератстратегията и алгоритъма, с който ще го имплементират.
+            които клиентът и сървърът да могат сами да си изберат стратегията и алгоритъма, с който ще го имплементират.
             Това може да подобри както истинската производителност, така и
             <a href="https://hpbn.co/primer-on-web-performance/#speed-performance-and-human-perception">възприетата от
                 човека производителност</a>.
@@ -457,7 +446,7 @@
             определен ресурс.
             След това ще отложи (on hold) доставката на оставащата част този ресурс, намалявайки stream flow control
             window-ът на 0. И по-късно може
-            да го увеличи. С други думи, browser-ът например може да си изтегли само preview на дадена картина, да я
+            да го увеличи. Например browser-ът може да си изтегли само preview на дадена картина, да я
             покаже на потребителя и
             после да позволи на други ресурси с висок приоритет да бъдат fetch-нати. По-късно, след като по-критичните
             ресурси бъдат изтеглени, ще си доизтегли цялата картинка.
@@ -476,11 +465,9 @@
 
         <p class="note">
             <strong>Забележка:</strong><span>
-                HTTP/2 избяга от стрикната семнатика на 'one-to-one request-response' и позволи 'one-to-many
-                request-response'
-                семантика, която е инициирана от сървъра. Този нов feature ще има важни дългосрочни последици за това
-                как
-                се мисли относно протокола и къде/как той ще бъде използван.
+                HTTP/2 избягва от стрикната семантика на 'one-to-one request-response' и позволява 'one-to-many
+                request-response' семантика, която е инициирана от сървъра. Този нов feature ще има важни дългосрочни
+                последици за това как се мисли относно HTTP протокола и къде/как той ще бъде използван.
             </span>
         </p>
 
@@ -511,17 +498,17 @@
             самите ресурси.
             Това е изключително важно: клиентът трябва да знае <b>предварително</b> кои ресурси сървърът има намерение
             да push-не, с цел
-            избягване на дуплициране на ресурси, например.
+            избягване на дуплициране на ресурси.
             <br><br>
             След като клиентът получи <b>PUSH_PROMISE</b> frame, той има възможността да откаже този поток посредством
-            <b>RST_STREAM</b> frame. (Това може да се случи, ако например ресурът вече е кеширан от клиента). Това е
+            <b>RST_STREAM</b> frame. (Това може да се случи, ако например ресурсът вече е кеширан от клиента). Това е
             важно подобрение на HTTP/1.x. Защото <i>resource inlining</i> оптимизацията, която HTTP/1.x ползва, е
             еквивалентна
             на forced push: клиентът не може да откаже push-а.
             <br><br>
             С HTTP/2 клиентът има пълен контрол над това как се използва server push механизмът. Клиентът може да
             ограничи
-            броят на конкурентните push streams; може да наглася flow control window-ът за да контролира колко данни
+            броя на конкурентните push streams; може да наглася flow control window-a за да контролира колко данни
             минават през
             даден push stream; може да деактивира server push напълно. Тези 'изисквания' на клиента се предават към
             сървъра посредством
@@ -532,55 +519,59 @@
             и обработен от клиента. Единственото ограничение, свързано със сигурността, наложено от browser-a, е, че
             push-натите ресурси
             трябва да се подчиняват на т.нар. <a href="https://en.wikipedia.org/wiki/Same-origin_policy">same-origin
-                policy</a>: сървърът
-            определя ресурите, които ще бъдат предоставяни.
+                policy</a>.
         </p>
 
         <h1 id="header_compression">12. Header compression</h1>
         <p>
-            Each HTTP transfer carries a set of headers that describe the transferred resource and its properties. In
-            HTTP/1.x, this metadata is always sent as plain text and adds anywhere from 500–800 bytes of overhead per
-            transfer, and sometimes kilobytes more if HTTP cookies are being used. (See Measuring and Controlling
-            Protocol
-            Overhead .) To reduce this overhead and improve performance, HTTP/2 compresses request and response header
-            metadata using the HPACK compression format that uses two simple but powerful techniques:
-
-            It allows the transmitted header fields to be encoded via a static Huffman code, which reduces their
-            individual
-            transfer size.
-            It requires that both the client and server maintain and update an indexed list of previously seen header
-            fields
-            (in other words, it establishes a shared compression context), which is then used as a reference to
-            efficiently
-            encode previously transmitted values.
-            Huffman coding allows the individual values to be compressed when transferred, and the indexed list of
-            previously transferred values allows us to encode duplicate values by transferring index values that can be
-            used
-            to efficiently look up and reconstruct the full header keys and values.
+            Всеки HTTP трансфер носи със себе си header-и, които описват трансферирания ресурс и неговите атрибути.
+            В HTTP/1.x тези метаданни винаги се изпращат като обикновен текст и добавят към даден пакет към 500-800
+            байта
+            отгоре, а понякога и килобайти, ако се използват HTTP бисквитки.
+            <br><br>
+            С цел да намали този overhead и да подобри производителността, HTTP/2 компресира request/response header
+            метаданните използвайки форматът <b>HPACK</b>, който използва две прости, но много мощни техники:
+        </p>
+        <ol>
+            <li>
+                Header полетата биват кодирани посредством <b>static Huffman code</b>,
+                което намалява обема на трансферираните данни.
+            </li>
+            <li>
+                И клиентът, и сървърът трябва да пазят и поддържат при себе си <b>индексиран списък</b> от предишно
+                видяни и компресирани header полета, който списък се използва за по-ефикасно кодиране
+                на данни, изпращани и преди. Един вид се изгражда <b>shared compression context</b>.
+            </li>
+        </ol>
+        <p>
+            Huffman кодирането компресира неизпращани до сега данни преди трансфериране. Индексираният списък,
+            съдържащ в себе си изпращани и преди данни, ги кодира, като изпраща индекси, вместо самите данни,
+            които индекси могат да бъдат използвани от отсрещната страна за ефикасно реконструиране на всички
+            получени header keys and values.
         </p>
 
         <img src="images/header_compression01.svg" alt="header compression" height="400" width="1000">
 
         <p>
-            As one further optimization, the HPACK compression context consists of a static and dynamic table: the
-            static
-            table is defined in the specification and provides a list of common HTTP header fields that all connections
-            are
-            likely to use (e.g., valid header names); the dynamic table is initially empty and is updated based on
-            exchanged
-            values within a particular connection. As a result, the size of each request is reduced by using static
-            Huffman
-            coding for values that haven’t been seen before, and substitution of indexes for values that are already
-            present
-            in the static or dynamic tables on each side.
-
-            Note: The definitions of the request and response header fields in HTTP/2 remains unchanged, with a few
-            minor
-            exceptions: all header field names are lowercase, and the request line is now split into individual :method,
-            :scheme, :authority, and :path pseudo-header fields.
+            Още една оптимизация на вече споменатия <b>HPACK shared compression context</b>
+            е използването на <b>статична и динамична таблица</b>.
+            Статичната таблица се дефинира предварително и предоставя списък от често срещани header
+            полета, които всяка една конекция има голяма вероятност да използва;
+            динамичната таблица първоначално е празна и бива update-ната
+            на базата на разменените данни в конкретна конекция.
+            В резултат на това размерът на всеки request е намален, използвайки <b>static Huffman coding</b>
+            за данни, които не са били виждани преди, както и използвайки индекси за данни, които вече са виждани
+            и съществуват в статичната или динамичната таблица във всяка една от страните.
         </p>
 
-        <h2 id="resources">RESOURCES:</h2>
+        <p class="note">
+            <strong>Забележка:</strong><span>
+                Дефинициите на request/response header полетата в HTTP/2 остават непроменени, с малки изключения:
+                всички header-и започват с малка буква, а първата линия, наречена <b>request line</b> в HTTP/1.x, е
+                разделена на няколко псевдо-header полета - :method, :scheme, :authority и :path.
+            </span>
+        </p>
+        <h2 id="resources">Ресурси:</h2>
         <ul>
             <a href="https://tools.ietf.org/html/rfc7540">
                 <li>https://tools.ietf.org/html/rfc7540</li>
