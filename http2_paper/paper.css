@@ -10,13 +10,17 @@ li {
     font-size: 25px;
 }
 
+body {
+    overflow-x: hidden;
+}
+
 /* The sidebar menu */
 
 .sidenav {
     height: 100%;
-    width: 275px;
+    /* width: 275px; */
+    width: 20em;
     position: fixed;
-    z-index: 1;
     top: 0;
     left: 0;
     background-color: rgb(5, 44, 59);
@@ -45,7 +49,8 @@ li {
 /* Style page content */
 
 .main {
-    margin-left: 275px;
+    /* margin-left: 275px; */
+    margin-left: 22em;
     padding: 0px 10px;
     text-align: justify;
     width: 80%;
