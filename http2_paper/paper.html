@@ -29,17 +29,23 @@
     <div class="main">
         <section>
             <h1 style="font-size:40px" id="beginning"><b>HTTP/2 - що е то и има ли почва у нас?</b></h1>
-            <img src="images/http2_logo.png" alt="HTTP/2 logo" width="1000">
+            <figure>
+                <img src="images/http2_logo.png" alt="HTTP/2 logo" width="1000">
+                <figcaption>Fig. 0</figcaption>
+            </figure>
         </section>
 
         <section>
             <h1 id="what_is_http">1. Какво е HTTP? </h1>
 
-            <img src="images/HTTP-Protocol.png" alt="HTTP request and response">
+            <figure>
+                <img src="images/HTTP-Protocol.png" alt="HTTP request and response">
+                <figcaption>Fig. 1</figcaption>
+            </figure>
 
             <p>HTTP е мрежов протокол от приложния слой на OSI модела
                 служещ за обмяна на информация и ресурси в компютърни
-                мрежи. Както се вижда на картинката, клиент (например web browser) изпраща заявка за ресурс от web
+                мрежи. Както се вижда на картинката (Fig. 1), клиент (например web browser) изпраща заявка за ресурс от web
                 сървър,
                 като комуникацията и преносът на данни се извършват чрез HTTP. <br>
                 HTTP използва TCP като транспортен протокол.
@@ -71,7 +77,7 @@
                             href="https://en.wikipedia.org/wiki/HTTP_pipelining">HTTP pipelining</a></b>. Накратко това
                     ни
                     позволява да изпращаме
-                    няколко заявки през една и съща TCP конекция (както се вижда на втората картинка - заявката на
+                    няколко заявки през една и съща TCP конекция (както се вижда на втората картинка (Fig. 3) - заявката на
                     HTTP/1.1
                     изисква снимка на къщата и колата, преди да се сложи край на конекцията). Все още обаче го има
                     проблема
@@ -87,8 +93,16 @@
                     </p>
                 </li>
 
-                <img src="images/http2-changes-everything-4-638.jpg" alt="HTTP: 1.1 vs 1.0" height="450" width="650">
-                <img src="images/http2-changes-everything-5-638.jpg" alt="HTTP: 1.1 vs 1.0" height="450" width="650">
+                <figure>
+                    <img src="images/http2-changes-everything-4-638.jpg" alt="HTTP: 1.1 vs 1.0" height="450"
+                        width="650">
+                    <figcaption>Fig. 2</figcaption>
+                </figure>
+                <figure>
+                    <img src="images/http2-changes-everything-5-638.jpg" alt="HTTP: 1.1 vs 1.0" height="450"
+                        width="650">
+                    <figcaption>Fig. 3</figcaption>
+                </figure>
 
                 <li>
                     HTTP хедърите (header fields) доста често са многословни и повтарящи се, което причинява ненужно
@@ -106,7 +120,10 @@
                 заради ниската производителност на HTTP/1.x. Точно това се опитва да олекоти HTTP/2.
             </p>
 
-            <img src="images/http2-changes-everything-13-638.jpg" alt="HTTP timeline" height="450">
+            <figure>
+                <img src="images/http2-changes-everything-13-638.jpg" alt="HTTP timeline" height="450">
+                <figcaption>Fig. 4</figcaption>
+            </figure>
         </section>
 
         <section>
@@ -157,7 +174,10 @@
                 се изграждат и трансферират между клиента и сървъра.
             </p>
 
-            <img src="images/binary_framing_layer01.svg" alt="binary framing layer" height="350" width="700">
+            <figure>
+                <img src="images/binary_framing_layer01.svg" alt="binary framing layer" height="350" width="700">
+                <figcaption>Fig. 5</figcaption>
+            </figure>
 
             <p>
                 Думата "layer" (слой) се отнася до избора да се използва нов <b>механизъм за кодиране на
@@ -222,8 +242,10 @@
                 съобщение, използвайки frame header-а, за да се извлече информация към кой stream принадлежи.
             </p>
 
-            <img src="images/streams_messages_frames01.svg" alt="streams, messages and frames" height="700"
-                width="1000">
+            <figure>
+                <img src="images/streams_messages_frames01.svg" alt="streams, messages and frames" height="700">
+                <figcaption>Fig. 6</figcaption>
+            </figure>
 
             <p>
                 Накратко, HTTP/2 разбива комуникацията на HTTP протокола до обмен на <b>binary-encoded frames</b>, които
@@ -255,10 +277,13 @@
                 сглобяват обратно на другия край на конекцията.
             </p>
 
-            <img src="images/multiplexing01.svg" alt="multiplexing" height="400" width="1000">
+            <figure>
+                <img src="images/multiplexing01.svg" alt="multiplexing" height="400" width="1000">
+                <figcaption>Fig. 7</figcaption>
+            </figure>
 
             <p>
-                Снимката отгоре показва няколко потока (streams) в рамките на една TCP конекция. Клиентът изпраща DATA
+                Снимката отгоре (Fig. 7) показва няколко потока (streams) в рамките на една TCP конекция. Клиентът изпраща DATA
                 frame към сървъра, докато през това време сървърът препраща преплетена последователност от frames към
                 клиента съответно за stream 1 и stream 3. В резултат на това получаваме 3 паралелни потока в действие.
                 Способността да се разбие едно HTTP съобщение на независими frame-ове, след това да се преплитат и
@@ -330,7 +355,10 @@
                 клиента.
             </p>
 
-            <img src="images/stream_prioritization01.svg" alt="stream prioritization" height="400" width="1000">
+            <figure>
+                <img src="images/stream_prioritization01.svg" alt="stream prioritization" height="400" width="1000">
+                <figcaption>Fig. 8</figcaption>
+            </figure>
 
             <p>
                 <b>Stream dependency (зависимост между потоци)</b> в HTTP/2 се дефинира, като зависимият поток има
@@ -338,7 +366,7 @@
                 потокът по-подразбиране става зависим от т.нар. "root stream". Ако декларираме зависимост между потоци,
                 това индикира, че за parent stream-ът ще бъдат заделяни ресурси по-рано, отколкото за child
                 stream-овете.
-                С други думи "Моля, обработете stream D преди stream C" (на картинката се вижда, че C е зависим от D).
+                С други думи "Моля, обработете stream D преди stream C" (на картинката (Fig.8) се вижда, че C е зависим от D).
                 <br><br>
 
                 За потоците, които имат един и същи баща (sibling streams), се заделят ресурси пропорционално на техните
@@ -355,7 +383,7 @@
                         от наличните ресурси.
                     </li>
                 </ol>
-                <p>Да разгледаме примерите от снимката по-горе. От ляво на дясно:</p>
+                <p>Да разгледаме примерите от снимката по-горе (Fig.8). От ляво на дясно:</p>
                 <ol>
                     <li>
                         Нито поток А, нито поток B имат зависимост, за това имплицитно са зависими от "root stream".
@@ -531,7 +559,10 @@
                 към клиента, които сметне, че ще му бъдат нужни, без клиентът да ги е поискал експлицитно.
             </p>
 
-            <img src="images/push01.svg" alt="server push" height="400" width="1000">
+            <figure>
+                <img src="images/push01.svg" alt="server push" height="400" width="1000">
+                <figcaption>Fig. 9</figcaption>
+            </figure>
 
             <p class="note">
                 <strong>Забележка:</strong><span>
@@ -633,7 +664,10 @@
                 получени header keys and values.
             </p>
 
-            <img src="images/header_compression01.svg" alt="header compression" height="400" width="1000">
+            <figure>
+                <img src="images/header_compression01.svg" alt="header compression" height="400" width="1000">
+                <figcaption>Fig. 10</figcaption>
+            </figure>
 
             <p>
                 Още една оптимизация на вече споменатия <b>HPACK shared compression context</b>
