@@ -50,7 +50,7 @@ body {
 
 .main {
     /* margin-left: 275px; */
-    margin-left: 22em;
+    margin-left: 21em;
     padding: 0px 10px;
     text-align: justify;
     width: 80%;
@@ -71,3 +71,10 @@ body {
         font-size: 18px;
     }
 }
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
