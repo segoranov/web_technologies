@@ -25,21 +25,22 @@ function validateForm() {
     if (username.length < 3 || username.length > 10) {
         document.getElementById('error_username').innerHTML = "Username length should be between 3 and 10 symbols";
         return false;
+    } else if (/[^_a-zA-Z0-9]/.test(username)) {
+        document.getElementById('error_username').innerHTML = "Username contains invalid symbols";
+        return false;
     } else {
         document.getElementById('error_username').innerHTML = "OK";
     }
 
     if (password.length < 6) {
         document.getElementById('error_password').innerHTML = "Password must contain at least 6 symbols";
-    } else {
-        document.getElementById('error_password').innerHTML = "OK";
-    }
-
-    if (!/\d/.test(password) || !/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
+        return false;
+    } else if (!/\d/.test(password) || !/[a-z]/.test(password) || !/[A-Z]/.test(password)) {
         document.getElementById('error_password').innerHTML
             = "Password must contain at least one digit, upper case letter and lower case letter";
         return false;
-    } else {
+    }
+    else {
         document.getElementById('error_password').innerHTML = "OK";
     }
 
@@ -49,7 +50,6 @@ function validateForm() {
     } else {
         document.getElementById('error_repeat_password').innerHTML = "OK";
     }
-
 
     return true;
 }
